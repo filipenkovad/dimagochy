@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Димагочи: Репинский Вайб</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="main.js" defer></script>
+  </head>
+  <body>
+    <main class="game-shell" aria-live="polite">
+      <section class="topbar" aria-label="Состояние партии">
+        <div>
+          <p class="eyebrow">локальный party tamagotchi</p>
+          <h1>Димагочи: Репинский Вайб</h1>
+        </div>
+        <div class="turn-card">
+          <span id="turnLabel">Ход 1 / 12</span>
+          <button class="small-button" id="restartButton" type="button">Новая партия</button>
+        </div>
+      </section>
+
+      <section class="layout">
+        <section class="stage-panel" aria-label="Игровая сцена">
+          <div class="location-strip">
+            <span id="locationName">Квартира Репиных</span>
+            <span id="locationTag">диван, PS и подозрительно уютно</span>
+          </div>
+
+          <div class="stage location-apartment" id="stage">
+            <div class="skyline" aria-hidden="true"></div>
+            <div class="scene-prop prop-sofa" aria-hidden="true"></div>
+            <div class="scene-prop prop-toilet" aria-hidden="true"></div>
+            <div class="scene-prop prop-ps" aria-hidden="true"></div>
+            <div class="scene-prop prop-laptop" aria-hidden="true"></div>
+            <div class="scene-prop prop-door" aria-hidden="true"></div>
+            <div class="scene-prop prop-tuktuk" aria-hidden="true"></div>
+            <div class="scene-prop prop-cow" aria-hidden="true"></div>
+            <div class="scene-prop prop-spice" aria-hidden="true"></div>
+            <div class="scene-prop prop-beer" aria-hidden="true"></div>
+            <div class="scene-prop prop-frog" aria-hidden="true"></div>
+            <div class="scene-prop prop-hearts" aria-hidden="true">
+              <span></span><span></span><span></span><span></span><span></span>
+            </div>
+            <div class="floor-grid" aria-hidden="true"></div>
+            <div class="characters" id="characters"></div>
+            <div class="event-bubble" id="eventBubble">Выберите первое действие для Димы.</div>
+          </div>
+
+          <div class="action-row" id="actions" aria-label="Действия"></div>
+        </section>
+
+        <aside class="side-panel" aria-label="Показатели и события">
+          <section class="stats-panel">
+            <h2>Шкалы Димы</h2>
+            <div id="stats"></div>
+          </section>
+
+          <section class="meme-card" id="memeCard">
+            <div class="meme-photo" id="memePhoto" aria-hidden="true">
+              <span>фото<br>сюда</span>
+            </div>
+            <div>
+              <p class="eyebrow">последний мем</p>
+              <h2 id="memeTitle">Репин просыпается</h2>
+              <p id="memeText">Дима пока подозрительно спокоен. Это ненадолго.</p>
+            </div>
+          </section>
+
+          <section class="log-panel">
+            <h2>Лента угара</h2>
+            <ol id="logList"></ol>
+          </section>
+        </aside>
+      </section>
+
+      <section class="ending hidden" id="ending" aria-label="Финал партии">
+        <div class="ending-card">
+          <p class="eyebrow">финал партии</p>
+          <h2 id="endingTitle"></h2>
+          <p id="endingText"></p>
+          <button class="primary-button" id="playAgainButton" type="button">Сыграть ещё раз</button>
+        </div>
+      </section>
+    </main>
+  </body>
+</html>

@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 240">
+  <rect width="240" height="240" fill="#acd48c"/>
+  <rect x="16" y="16" width="208" height="208" fill="#7bbf72" stroke="#263238" stroke-width="8"/>
+  <circle cx="84" cy="74" r="30" fill="#72b26b" stroke="#263238" stroke-width="7"/>
+  <circle cx="156" cy="74" r="30" fill="#72b26b" stroke="#263238" stroke-width="7"/>
+  <ellipse cx="120" cy="132" rx="78" ry="62" fill="#72b26b" stroke="#263238" stroke-width="8"/>
+  <circle cx="84" cy="74" r="8" fill="#263238"/>
+  <circle cx="156" cy="74" r="8" fill="#263238"/>
+  <path d="M82 134q38 32 76 0" fill="none" stroke="#263238" stroke-width="8"/>
+  <text x="120" y="218" text-anchor="middle" font-family="monospace" font-size="18" font-weight="900" fill="#263238">ЛЯМГУШКА</text>
+</svg>

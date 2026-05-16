@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 240">
+  <rect width="240" height="240" fill="#d8f0f0"/>
+  <rect x="16" y="16" width="208" height="208" fill="#b9e2e8" stroke="#263238" stroke-width="8"/>
+  <rect x="80" y="34" width="80" height="64" fill="#eef7f4" stroke="#263238" stroke-width="7"/>
+  <rect x="90" y="98" width="60" height="26" fill="#d6e7e5" stroke="#263238" stroke-width="6"/>
+  <rect x="62" y="124" width="116" height="62" fill="#eef7f4" stroke="#263238" stroke-width="7"/>
+  <rect x="86" y="186" width="68" height="28" fill="#c9d8d5" stroke="#263238" stroke-width="6"/>
+  <text x="120" y="226" text-anchor="middle" font-family="monospace" font-size="16" font-weight="900" fill="#263238">5 МИНУТ</text>
+</svg>

@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 240">
+  <rect width="240" height="240" fill="#e8cf79"/>
+  <rect x="18" y="18" width="204" height="204" fill="#7fc9c0" stroke="#263238" stroke-width="8"/>
+  <rect x="56" y="66" width="116" height="66" fill="#f2c94c" stroke="#263238" stroke-width="7"/>
+  <rect x="74" y="82" width="54" height="28" fill="#2b3034"/>
+  <rect x="38" y="132" width="154" height="34" fill="#72b26b" stroke="#263238" stroke-width="7"/>
+  <circle cx="70" cy="174" r="20" fill="#263238"/>
+  <circle cx="162" cy="174" r="20" fill="#263238"/>
+  <text x="120" y="218" text-anchor="middle" font-family="monospace" font-size="14" font-weight="900" fill="#263238">YOU NEED TUK-TUK?</text>
+</svg>

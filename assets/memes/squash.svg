@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 240">
+  <rect width="240" height="240" fill="#d7f2e9"/>
+  <rect x="18" y="18" width="204" height="204" fill="#67b99a" stroke="#263238" stroke-width="8"/>
+  <rect x="38" y="44" width="164" height="118" fill="#b7efcf" stroke="#263238" stroke-width="7"/>
+  <path d="M38 102h164M120 44v118" stroke="#263238" stroke-width="5" opacity=".55"/>
+  <rect x="58" y="120" width="42" height="54" fill="#9a554d" stroke="#263238" stroke-width="6"/>
+  <rect x="140" y="120" width="42" height="54" fill="#7e57c2" stroke="#263238" stroke-width="6"/>
+  <circle cx="92" cy="104" r="18" fill="none" stroke="#263238" stroke-width="7"/>
+  <circle cx="154" cy="104" r="18" fill="none" stroke="#263238" stroke-width="7"/>
+  <path d="M84 118l-22 24M162 118l24 24" stroke="#263238" stroke-width="6"/>
+  <circle cx="124" cy="94" r="7" fill="#f2c94c" stroke="#263238" stroke-width="4"/>
+  <text x="120" y="218" text-anchor="middle" font-family="monospace" font-size="18" font-weight="900" fill="#263238">СКВОШ</text>
+</svg>

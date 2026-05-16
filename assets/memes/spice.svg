@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 240">
+  <rect width="240" height="240" fill="#d7a95e"/>
+  <rect x="18" y="18" width="204" height="204" fill="#6fbf8e" stroke="#263238" stroke-width="8"/>
+  <rect x="44" y="96" width="152" height="86" fill="#7a4b30" stroke="#263238" stroke-width="7"/>
+  <rect x="32" y="70" width="176" height="34" fill="#f1d66c" stroke="#263238" stroke-width="7"/>
+  <circle cx="78" cy="132" r="16" fill="#bf543f"/>
+  <circle cx="120" cy="132" r="16" fill="#72b26b"/>
+  <circle cx="162" cy="132" r="16" fill="#d7893d"/>
+  <text x="120" y="218" text-anchor="middle" font-family="monospace" font-size="17" font-weight="900" fill="#263238">SPICE GARDEN</text>
+</svg>

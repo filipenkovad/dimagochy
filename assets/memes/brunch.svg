@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 240">
+  <rect width="240" height="240" fill="#d4a86c"/>
+  <rect x="18" y="18" width="204" height="204" fill="#9e7a56" stroke="#263238" stroke-width="8"/>
+  <rect x="42" y="122" width="156" height="40" fill="#714f35" stroke="#263238" stroke-width="7"/>
+  <rect x="58" y="58" width="36" height="72" fill="#f4b63f" stroke="#263238" stroke-width="6"/>
+  <rect x="146" y="58" width="36" height="72" fill="#f4b63f" stroke="#263238" stroke-width="6"/>
+  <rect x="102" y="78" width="36" height="52" fill="#b84a34" stroke="#263238" stroke-width="6"/>
+  <text x="120" y="204" text-anchor="middle" font-family="monospace" font-size="17" font-weight="900" fill="#263238">ТЕСТОСТЕРОН</text>
+  <text x="120" y="224" text-anchor="middle" font-family="monospace" font-size="14" font-weight="900" fill="#263238">БРАНЧ</text>
+</svg>

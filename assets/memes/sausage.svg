@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 240">
+  <rect width="240" height="240" fill="#fff7d7"/>
+  <rect x="16" y="16" width="208" height="208" fill="#f2c94c" stroke="#263238" stroke-width="8"/>
+  <rect x="54" y="92" width="132" height="58" rx="26" fill="#f4b63f" stroke="#263238" stroke-width="7"/>
+  <rect x="76" y="106" width="88" height="30" rx="15" fill="#b84a34" stroke="#263238" stroke-width="6"/>
+  <path d="M56 84h128" stroke="#fff7d7" stroke-width="10" stroke-dasharray="18 14"/>
+  <path d="M56 158h128" stroke="#fff7d7" stroke-width="10" stroke-dasharray="18 14"/>
+  <text x="120" y="212" text-anchor="middle" font-family="monospace" font-size="17" font-weight="900" fill="#263238">СОСИСКА В ТЕСТЕ</text>
+</svg>

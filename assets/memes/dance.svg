@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 240">
+  <rect width="240" height="240" fill="#d4a86c"/>
+  <rect x="18" y="18" width="204" height="204" fill="#f2c94c" stroke="#263238" stroke-width="8"/>
+  <rect x="92" y="54" width="56" height="56" fill="#f0b68b" stroke="#263238" stroke-width="7"/>
+  <rect x="86" y="116" width="68" height="62" fill="#9a554d" stroke="#263238" stroke-width="7"/>
+  <path d="M88 126l-40 28M152 126l40-34" stroke="#263238" stroke-width="12"/>
+  <path d="M100 178l-28 34M140 178l38 28" stroke="#263238" stroke-width="12"/>
+  <text x="120" y="224" text-anchor="middle" font-family="monospace" font-size="16" font-weight="900" fill="#263238">НАРОДНЫЙ МУВ</text>
+</svg>
