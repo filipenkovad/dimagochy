@@ -16,6 +16,10 @@
         </div>
         <div class="turn-card">
           <span id="turnLabel">Ход 1 / 12</span>
+          <div class="turn-mode" aria-label="Длина партии">
+            <button class="mode-button" type="button" data-turns="8">8 ходов</button>
+            <button class="mode-button is-active" type="button" data-turns="12">12 ходов</button>
+          </div>
           <button class="small-button" id="soundButton" type="button" aria-pressed="true">Звук вкл</button>
           <button class="small-button" id="restartButton" type="button">Новая партия</button>
         </div>
@@ -86,8 +90,13 @@
       <section class="ending hidden" id="ending" aria-label="Финал партии">
         <div class="ending-card">
           <p class="eyebrow">финал партии</p>
+          <div class="ending-medal" aria-hidden="true">
+            <span>★</span>
+          </div>
+          <p class="ending-award" id="endingAward"></p>
           <h2 id="endingTitle"></h2>
           <p id="endingText"></p>
+          <div class="ending-summary" id="endingSummary"></div>
           <button class="primary-button" id="playAgainButton" type="button">Сыграть ещё раз</button>
         </div>
       </section>

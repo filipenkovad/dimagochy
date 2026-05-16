@@ -1,4 +1,4 @@
-const TOTAL_TURNS = 12;
+const DEFAULT_TOTAL_TURNS = 12;
 const EVENT_DELAY_MS = 5000;
 const TURN_DELAY_MS = 7600;
 let audioContext = null;
@@ -31,6 +31,13 @@ const statsConfig = [
   { id: "toilet", label: "Туалетная стабильность", color: "#48a7a0" },
   { id: "vibe", label: "Репинский вайб", color: "#f2c94c" },
 ];
+
+const memeVoiceLines = {
+  frog: "Лямгушка!",
+  tuktuk: "Hello sir. You need tuk-tuk?",
+  nogei: "С Саньком. Не геи.",
+  ending: "Финал партии!",
+};
 
 const busyPhrases = {
   default: [
@@ -400,42 +407,49 @@ const endings = [
   {
     id: "toilet",
     title: "Туалетный отшельник",
+    award: "Медаль: Король туалетной стабильности",
     condition: (s) => s.toilet >= 86,
     text: "Дима достиг такой стабильности, что игра предложила поставить табличку «не беспокоить до следующего дня рождения».",
   },
   {
     id: "pynya",
     title: "Пыня takeover",
+    award: "Орден Пыниного доверия",
     condition: (s) => s.pynya >= 84,
     text: "Пыня полностью захватила сцену, диван и эмоциональную экономику партии. Дима не против.",
   },
   {
     id: "masha",
     title: "Маша всё-таки вытащила",
+    award: "Знак отличия: Маша победила домашний режим",
     condition: (s) => s.masha >= 82 && s.home <= 45,
     text: "Дима хотел спокойно дома, но Маша собрала маршрут, людей и причину выйти. В итоге всем понравилось, особенно Маше.",
   },
   {
     id: "spice",
     title: "Spice garden hostage",
+    award: "Диплом заложника spice garden",
     condition: (s, game) => game.location === "spice" || game.seenEvents.has("spice"),
     text: "Тук-тук довёз компанию в spice garden. Формально партия закончилась, но гид уже достал корицу.",
   },
   {
     id: "brunch",
     title: "Тестостероновый патриарх",
+    award: "Кубок мужских вопросиков",
     condition: (s, game) => game.actionCounts.brunch >= 2,
     text: "Мясо, пиво и мужские вопросики сделали своё дело. Арт-бранчи уважаем, но тут был отдельный культурный институт.",
   },
   {
     id: "home",
     title: "Домашний режим победил",
+    award: "Плед домашнего чемпиона",
     condition: (s) => s.home >= 82 && s.masha < 50,
     text: "Диван, PS и Пыня доказали, что наружный мир переоценён. Маша уже планирует реванш.",
   },
   {
     id: "perfect",
     title: "Легендарный Репинский вайб",
+    award: "Главный кубок Репинского вайба",
     condition: (s, game) =>
       s.vibe >= 92 &&
       s.masha >= 55 &&
@@ -448,12 +462,14 @@ const endings = [
   {
     id: "frog",
     title: "ЛЯМГУШКА ending",
+    award: "Зелёный орден ЛЯМГУШКИ",
     condition: (s, game) => game.seenEvents.has("frog") && s.vibe >= 70,
     text: "Смысла никто не понял, но все смеются. Возможно, это и есть взрослая дружба.",
   },
   {
     id: "normal",
     title: "Нормальный репинский день",
+    award: "Сертификат нормального Репинского дня",
     condition: () => true,
     text: "Ничего не сломалось, Дима спокоен, гости довольны. Где-то на фоне всё ещё спрашивают про tuk-tuk.",
   },
@@ -461,6 +477,7 @@ const endings = [
 
 const state = {
   turn: 1,
+  totalTurns: DEFAULT_TOTAL_TURNS,
   location: "apartment",
   stats: {},
   availableActions: [],
@@ -471,6 +488,7 @@ const state = {
   locked: false,
   currentAction: null,
   busyText: "",
+  runId: 0,
 };
 
 const els = {
@@ -488,11 +506,14 @@ const els = {
   memeText: document.querySelector("#memeText"),
   logList: document.querySelector("#logList"),
   ending: document.querySelector("#ending"),
+  endingAward: document.querySelector("#endingAward"),
   endingTitle: document.querySelector("#endingTitle"),
   endingText: document.querySelector("#endingText"),
+  endingSummary: document.querySelector("#endingSummary"),
   tutorialCard: document.querySelector("#tutorialCard"),
   tutorialClose: document.querySelector("#tutorialClose"),
   soundButton: document.querySelector("#soundButton"),
+  modeButtons: document.querySelectorAll(".mode-button"),
   restartButton: document.querySelector("#restartButton"),
   playAgainButton: document.querySelector("#playAgainButton"),
 };
@@ -511,11 +532,19 @@ function init() {
       playSound("toggle");
     }
   });
+  els.modeButtons.forEach((button) => {
+    button.addEventListener("click", () => {
+      if (state.locked) return;
+      state.totalTurns = Number(button.dataset.turns);
+      resetGame();
+    });
+  });
   renderCharacters();
   resetGame();
 }
 
 function resetGame() {
+  state.runId += 1;
   clearStageEffects();
   state.turn = 1;
   state.location = "apartment";
@@ -570,7 +599,8 @@ function renderAll() {
   renderActions();
   renderLocation();
   renderLog();
-  els.turnLabel.textContent = `Ход ${Math.min(state.turn, TOTAL_TURNS)} / ${TOTAL_TURNS}`;
+  renderModeButtons();
+  els.turnLabel.textContent = `Ход ${Math.min(state.turn, state.totalTurns)} / ${state.totalTurns}`;
 }
 
 function renderStats() {
@@ -662,7 +692,9 @@ function playAction(actionId) {
   renderAll();
   applyActionStageMode(action);
 
+  const runId = state.runId;
   window.setTimeout(() => {
+    if (runId !== state.runId) return;
     const event = chooseEvent(action);
     if (event) {
       playEvent(event);
@@ -670,8 +702,9 @@ function playAction(actionId) {
   }, EVENT_DELAY_MS);
 
   window.setTimeout(() => {
+    if (runId !== state.runId) return;
     state.turn += 1;
-    if (state.turn > TOTAL_TURNS) {
+    if (state.turn > state.totalTurns) {
       finishGame();
       return;
     }
@@ -908,9 +941,21 @@ function finishGame() {
   playSound("ending");
   state.locked = true;
   const ending = endings.find((item) => item.condition(state.stats, state));
+  els.endingAward.textContent = ending.award;
   els.endingTitle.textContent = ending.title;
   els.endingText.textContent = ending.text;
+  els.endingSummary.innerHTML = getEndingSummary()
+    .map((item) => `<span>${item}</span>`)
+    .join("");
   els.ending.classList.remove("hidden");
+}
+
+function renderModeButtons() {
+  els.modeButtons.forEach((button) => {
+    const isActive = Number(button.dataset.turns) === state.totalTurns;
+    button.classList.toggle("is-active", isActive);
+    button.disabled = state.locked;
+  });
 }
 
 function setBubble(text) {
@@ -960,6 +1005,19 @@ function getBusyText(action) {
   return sample(phrases);
 }
 
+function getEndingSummary() {
+  const leader = statsConfig
+    .map((stat) => ({ ...stat, value: clamp(state.stats[stat.id]) }))
+    .sort((a, b) => b.value - a.value)[0];
+  const brunchCount = state.actionCounts.brunch || 0;
+  return [
+    `${state.totalTurns} ходов`,
+    `${state.seenEvents.size} мемов поймано`,
+    `${leader.label}: ${leader.value}`,
+    `Бранчей: ${brunchCount}`,
+  ];
+}
+
 function weightedPick(items) {
   const total = items.reduce((sum, item) => sum + item.weight, 0);
   let cursor = Math.random() * total;
@@ -1001,6 +1059,7 @@ function playSound(type) {
       [196, 0.1, "square", 0.05, 0],
       [247, 0.1, "square", 0.05, 0.11],
       [294, 0.16, "square", 0.05, 0.22],
+      [392, 0.18, "square", 0.045, 0.42],
     ],
     tuktuk: [
       [95, 0.05, "square", 0.055, 0],
@@ -1017,6 +1076,7 @@ function playSound(type) {
       [262, 0.12, "triangle", 0.05, 0],
       [330, 0.12, "triangle", 0.05, 0.14],
       [392, 0.2, "triangle", 0.05, 0.28],
+      [523, 0.28, "triangle", 0.045, 0.5],
     ],
     toggle: [[440, 0.08, "triangle", 0.035, 0]],
     default: [
@@ -1028,6 +1088,7 @@ function playSound(type) {
   (patterns[type] || patterns.default).forEach(([frequency, duration, wave, volume, delay]) => {
     playTone(context, frequency, duration, wave, volume, delay);
   });
+  speakMeme(type);
 }
 
 function playTone(context, frequency, duration, wave, volume, delay) {
@@ -1043,6 +1104,19 @@ function playTone(context, frequency, duration, wave, volume, delay) {
   gain.connect(context.destination);
   oscillator.start(start);
   oscillator.stop(start + duration + 0.03);
+}
+
+function speakMeme(type) {
+  if (!soundEnabled || !memeVoiceLines[type] || !("speechSynthesis" in window)) return;
+  window.setTimeout(() => {
+    const utterance = new SpeechSynthesisUtterance(memeVoiceLines[type]);
+    utterance.lang = type === "tuktuk" ? "en-US" : "ru-RU";
+    utterance.rate = type === "frog" ? 0.78 : 0.95;
+    utterance.pitch = type === "frog" ? 0.55 : 1.08;
+    utterance.volume = 0.9;
+    window.speechSynthesis.cancel();
+    window.speechSynthesis.speak(utterance);
+  }, 120);
 }
 
 init();

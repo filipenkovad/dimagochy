@@ -79,6 +79,7 @@ h2 {
 .turn-card {
   display: flex;
   align-items: center;
+  flex-wrap: wrap;
   gap: 12px;
   padding: 10px;
   color: #fff;
@@ -86,6 +87,34 @@ h2 {
   border: 4px solid var(--line);
   box-shadow: 8px 8px 0 rgba(23, 33, 38, 0.16);
   font-weight: 850;
+}
+
+.turn-mode {
+  display: flex;
+  gap: 4px;
+  padding: 4px;
+  border: 3px solid rgba(255, 255, 255, 0.24);
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.mode-button {
+  min-height: 34px;
+  padding: 5px 9px;
+  border: 3px solid var(--line);
+  color: var(--ink);
+  background: #d8d2c3;
+  cursor: pointer;
+  font-size: 0.82rem;
+  font-weight: 950;
+}
+
+.mode-button.is-active {
+  background: var(--yellow);
+}
+
+.mode-button:disabled {
+  cursor: wait;
+  filter: grayscale(0.65);
 }
 
 .small-button,
@@ -1247,32 +1276,49 @@ h2 {
 
 .meme-card {
   display: grid;
-  grid-template-columns: 116px minmax(0, 1fr);
-  gap: 12px;
+  grid-template-columns: 142px minmax(0, 1fr);
+  gap: 16px;
   align-items: center;
   position: relative;
   overflow: hidden;
-  background: #fff7d7;
+}
+
+.side-panel > .meme-card {
+  border: 7px solid var(--line);
+  background:
+    linear-gradient(90deg, rgba(23, 33, 38, 0.08) 1px, transparent 1px),
+    linear-gradient(rgba(23, 33, 38, 0.08) 1px, transparent 1px),
+    #fff2b8;
+  background-size: 14px 14px;
   box-shadow:
-    0 0 0 6px rgba(242, 201, 76, 0.58),
-    var(--shadow);
+    0 0 0 7px rgba(229, 107, 79, 0.52),
+    0 0 0 14px rgba(242, 201, 76, 0.72),
+    14px 14px 0 rgba(23, 33, 38, 0.18);
 }
 
 .meme-card::before {
   content: "ПОСЛЕДНИЙ МЕМ";
   position: absolute;
-  right: -45px;
-  top: 14px;
-  width: 170px;
-  padding: 5px 0;
-  transform: rotate(32deg);
-  border-top: 3px solid var(--line);
-  border-bottom: 3px solid var(--line);
+  right: -58px;
+  top: 20px;
+  width: 214px;
+  padding: 7px 0;
+  transform: rotate(34deg);
+  border-top: 4px solid var(--line);
+  border-bottom: 4px solid var(--line);
   color: var(--ink);
-  background: var(--yellow);
-  font-size: 0.62rem;
+  background: var(--coral);
+  font-size: 0.72rem;
   font-weight: 950;
   text-align: center;
+}
+
+.meme-card::after {
+  content: "";
+  position: absolute;
+  inset: 8px;
+  pointer-events: none;
+  border: 3px dashed rgba(23, 33, 38, 0.28);
 }
 
 .meme-card.flash {
@@ -1280,27 +1326,31 @@ h2 {
 }
 
 .meme-card h2 {
-  margin-bottom: 6px;
+  margin-bottom: 8px;
+  font-size: clamp(1.35rem, 2vw, 1.9rem);
+  line-height: 0.98;
 }
 
 .meme-card p:last-child {
   margin-bottom: 0;
-  color: #3e4a51;
-  font-weight: 700;
-  line-height: 1.32;
+  color: #263238;
+  font-size: 1rem;
+  font-weight: 850;
+  line-height: 1.28;
 }
 
 .meme-photo {
   display: grid;
-  width: 116px;
+  width: 142px;
   aspect-ratio: 1;
   place-items: center;
-  border: 4px solid var(--line);
+  border: 5px solid var(--line);
   background:
     linear-gradient(90deg, rgba(23, 33, 38, 0.12) 1px, transparent 1px),
     linear-gradient(rgba(23, 33, 38, 0.12) 1px, transparent 1px),
     #dbe6dc;
   background-size: 12px 12px;
+  box-shadow: 7px 7px 0 rgba(23, 33, 38, 0.18);
   color: var(--muted);
   font-size: 0.88rem;
   font-weight: 950;
@@ -1351,22 +1401,113 @@ h2 {
 }
 
 .ending-card {
-  width: min(720px, 100%);
-  padding: 28px;
+  position: relative;
+  width: min(760px, 100%);
+  overflow: hidden;
+  padding: 30px;
   background: #fff7d7;
   text-align: center;
 }
 
+.ending-card::before,
+.ending-card::after {
+  content: "";
+  position: absolute;
+  top: -40px;
+  bottom: -40px;
+  width: 56px;
+  background:
+    linear-gradient(var(--coral) 0 0) 0 0 / 100% 18px repeat-y,
+    var(--yellow);
+  opacity: 0.88;
+}
+
+.ending-card::before {
+  left: 26px;
+}
+
+.ending-card::after {
+  right: 26px;
+}
+
+.ending-medal {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  width: 142px;
+  height: 142px;
+  margin: 0 auto 14px;
+  place-items: center;
+  border: 6px solid var(--line);
+  border-radius: 50%;
+  background:
+    radial-gradient(circle, #fff7d7 0 28px, transparent 29px),
+    radial-gradient(circle, var(--yellow) 0 68px, transparent 69px);
+  box-shadow:
+    0 0 0 8px rgba(229, 107, 79, 0.26),
+    10px 10px 0 rgba(23, 33, 38, 0.16);
+  animation: medalPop 720ms cubic-bezier(0.2, 1.5, 0.36, 1) both;
+}
+
+.ending-medal span {
+  color: var(--coral);
+  font-size: 4.4rem;
+  line-height: 1;
+  text-shadow: 4px 4px 0 rgba(23, 33, 38, 0.16);
+}
+
+.ending-award {
+  position: relative;
+  z-index: 1;
+  display: inline-block;
+  margin-bottom: 14px;
+  padding: 8px 12px;
+  border: 4px solid var(--line);
+  background: #f2c94c;
+  color: var(--ink);
+  font-size: 1rem;
+  font-weight: 950;
+}
+
 .ending-card h2 {
+  position: relative;
+  z-index: 1;
   margin-bottom: 12px;
   font-size: clamp(2rem, 4vw, 4rem);
 }
 
 .ending-card p {
+  position: relative;
+  z-index: 1;
   color: #3d474e;
   font-size: 1.15rem;
   font-weight: 750;
   line-height: 1.45;
+}
+
+.ending-summary {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 8px;
+  margin: 18px 0 22px;
+}
+
+.ending-summary span {
+  min-height: 52px;
+  padding: 9px;
+  border: 3px solid var(--line);
+  background: #fffaf0;
+  color: #303b42;
+  font-size: 0.86rem;
+  font-weight: 900;
+  line-height: 1.15;
+}
+
+.ending-card .primary-button {
+  position: relative;
+  z-index: 1;
 }
 
 @keyframes hop {
@@ -1441,6 +1582,23 @@ h2 {
     box-shadow:
       0 0 0 6px rgba(242, 201, 76, 0.58),
       var(--shadow);
+  }
+}
+
+@keyframes medalPop {
+  0% {
+    transform: translateY(24px) scale(0.62) rotate(-10deg);
+    opacity: 0;
+  }
+
+  68% {
+    transform: translateY(-8px) scale(1.08) rotate(4deg);
+    opacity: 1;
+  }
+
+  100% {
+    transform: translateY(0) scale(1) rotate(0deg);
+    opacity: 1;
   }
 }
 
@@ -1655,7 +1813,17 @@ h2 {
   }
 
   .turn-card {
+    align-items: stretch;
+    flex-direction: column;
     justify-content: space-between;
+  }
+
+  .turn-mode {
+    justify-content: stretch;
+  }
+
+  .mode-button {
+    flex: 1;
   }
 
   .stage {
@@ -1663,7 +1831,8 @@ h2 {
   }
 
   .action-row,
-  .side-panel {
+  .side-panel,
+  .ending-summary {
     grid-template-columns: 1fr;
   }
 
