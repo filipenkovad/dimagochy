@@ -33,7 +33,7 @@ const statsConfig = [
 ];
 
 const memeVoiceLines = {
-  frog: "Лямгушка!",
+  frog: "Лямгумншка!",
   tuktuk: "Hello sir. You need tuk-tuk?",
   nogei: "С Саньком. Не геи.",
   ending: "Финал партии!",
@@ -312,7 +312,7 @@ const actions = [
 const events = [
   {
     id: "frog",
-    title: "ЛЯМГУШКА",
+    title: "ЛЯМГУМНШКА",
     text: "Кто-то говорит слово без смысла. Все почему-то смеются. Вайб резко растёт.",
     location: null,
     className: "frog-in",
@@ -461,8 +461,8 @@ const endings = [
   },
   {
     id: "frog",
-    title: "ЛЯМГУШКА ending",
-    award: "Зелёный орден ЛЯМГУШКИ",
+    title: "ЛЯМГУМНШКА ending",
+    award: "Зелёный орден ЛЯМГУМНШКИ",
     condition: (s, game) => game.seenEvents.has("frog") && s.vibe >= 70,
     text: "Смысла никто не понял, но все смеются. Возможно, это и есть взрослая дружба.",
   },
