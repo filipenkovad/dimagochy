@@ -105,6 +105,10 @@ h2 {
   font-weight: 850;
 }
 
+#soundButton[aria-pressed="false"] {
+  background: #d8d2c3;
+}
+
 .primary-button {
   min-height: 54px;
   padding: 12px 18px;
@@ -131,6 +135,30 @@ h2 {
   grid-template-columns: minmax(0, 1fr) 390px;
   gap: 18px;
   align-items: start;
+}
+
+.tutorial-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  margin-bottom: 16px;
+  padding: 14px;
+  border: 5px solid var(--line);
+  background: #fff7d7;
+  box-shadow: var(--shadow);
+}
+
+.tutorial-card.hidden {
+  display: none;
+}
+
+.tutorial-card p:last-child {
+  max-width: 880px;
+  margin-bottom: 0;
+  color: #39444a;
+  font-weight: 800;
+  line-height: 1.35;
 }
 
 .stage-panel,
@@ -920,14 +948,14 @@ h2 {
 }
 
 .dima.not-gay-pose {
-  left: 43%;
+  left: 44%;
   z-index: 6;
   transform: translateX(-50%) scaleX(-1);
 }
 
 .masha.as-kamil.not-gay-pose {
   display: block;
-  left: 51%;
+  left: 50%;
   bottom: 84px;
   z-index: 7;
   transform: translateX(-50%) scaleX(-1);
@@ -1101,6 +1129,10 @@ h2 {
   background: #efe3ca;
 }
 
+.action-row.is-hidden {
+  grid-template-columns: 1fr;
+}
+
 .action-button {
   display: grid;
   grid-template-columns: 56px minmax(0, 1fr);
@@ -1150,6 +1182,31 @@ h2 {
   line-height: 1.15;
 }
 
+.busy-card {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  min-height: 92px;
+  padding: 16px;
+  border: 4px solid var(--line);
+  color: var(--ink);
+  background: #fff7d7;
+  box-shadow: 6px 6px 0 rgba(23, 33, 38, 0.14);
+  font-size: clamp(1.05rem, 1.5vw, 1.35rem);
+  font-weight: 950;
+  text-align: center;
+}
+
+.busy-dot {
+  width: 18px;
+  height: 18px;
+  flex: 0 0 auto;
+  border: 3px solid var(--line);
+  background: var(--coral);
+  animation: busyBlink 620ms steps(2, end) infinite;
+}
+
 .side-panel {
   display: grid;
   gap: 14px;
@@ -1193,6 +1250,33 @@ h2 {
   grid-template-columns: 116px minmax(0, 1fr);
   gap: 12px;
   align-items: center;
+  position: relative;
+  overflow: hidden;
+  background: #fff7d7;
+  box-shadow:
+    0 0 0 6px rgba(242, 201, 76, 0.58),
+    var(--shadow);
+}
+
+.meme-card::before {
+  content: "ПОСЛЕДНИЙ МЕМ";
+  position: absolute;
+  right: -45px;
+  top: 14px;
+  width: 170px;
+  padding: 5px 0;
+  transform: rotate(32deg);
+  border-top: 3px solid var(--line);
+  border-bottom: 3px solid var(--line);
+  color: var(--ink);
+  background: var(--yellow);
+  font-size: 0.62rem;
+  font-weight: 950;
+  text-align: center;
+}
+
+.meme-card.flash {
+  animation: memeFlash 480ms ease;
 }
 
 .meme-card h2 {
@@ -1321,6 +1405,42 @@ h2 {
 
   100% {
     transform: translateX(-50%) scale(1);
+  }
+}
+
+@keyframes busyBlink {
+  0%,
+  100% {
+    transform: scale(1);
+    background: var(--coral);
+  }
+
+  50% {
+    transform: scale(0.7);
+    background: var(--yellow);
+  }
+}
+
+@keyframes memeFlash {
+  0% {
+    transform: translateY(0) scale(1);
+    box-shadow:
+      0 0 0 6px rgba(242, 201, 76, 0.58),
+      var(--shadow);
+  }
+
+  45% {
+    transform: translateY(-4px) scale(1.025);
+    box-shadow:
+      0 0 0 10px rgba(229, 107, 79, 0.6),
+      0 18px 0 rgba(23, 33, 38, 0.16);
+  }
+
+  100% {
+    transform: translateY(0) scale(1);
+    box-shadow:
+      0 0 0 6px rgba(242, 201, 76, 0.58),
+      var(--shadow);
   }
 }
 
@@ -1524,6 +1644,7 @@ h2 {
   }
 
   .topbar,
+  .tutorial-card,
   .location-strip {
     align-items: stretch;
     flex-direction: column;

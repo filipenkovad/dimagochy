@@ -1,6 +1,8 @@
 const TOTAL_TURNS = 12;
 const EVENT_DELAY_MS = 5000;
 const TURN_DELAY_MS = 7600;
+let audioContext = null;
+let soundEnabled = true;
 
 const memeImages = {
   start: "assets/memes/start.svg",
@@ -29,6 +31,55 @@ const statsConfig = [
   { id: "toilet", label: "Туалетная стабильность", color: "#48a7a0" },
   { id: "vibe", label: "Репинский вайб", color: "#f2c94c" },
 ];
+
+const busyPhrases = {
+  default: [
+    "Дима занят. Решения временно принимаются без демократии.",
+    "Дима делает вид, что всё под контролем.",
+    "Дима проживает последствия вашего выбора.",
+    "Дима обрабатывает мемную нагрузку.",
+  ],
+  toilet: [
+    "Дима в туалете. Следующий ход подождёт.",
+    "Дима ушёл на пять минут по репинскому времени.",
+    "Дима стабилизирует внутреннюю систему.",
+  ],
+  pynya: [
+    "Дима гладит Пыню. Мир поставлен на паузу.",
+    "Пыня заняла Диму полностью.",
+    "Дима и Пыня синхронизируются без свидетелей.",
+  ],
+  masha: [
+    "Маша ведёт, Дима идёт. Всё честно.",
+    "Дима уточняет, долго ли ещё гулять.",
+    "Маша уже выбрала маршрут, Дима ещё выбирает лицо.",
+  ],
+  ps: [
+    "Дима в катке. Доступ к действиям временно закрыт.",
+    "Диван держит Диму крепко.",
+    "Дима нажимает кнопки с серьёзным лицом.",
+  ],
+  code: [
+    "Дима кодит. Не трогать, идёт магия.",
+    "Дима смотрит в баг, баг смотрит в Диму.",
+    "Репинский вайб компилируется.",
+  ],
+  squash: [
+    "Дима и Маша машут ракетками. Мячик в стрессе.",
+    "Дима потеет стратегически.",
+    "Сквош идёт, домашний заряд терпит.",
+  ],
+  sausage: [
+    "Дима ест сосиску в тесте. Это важный процесс.",
+    "Дима восстанавливает ресурс через тесто.",
+    "Сосиска в тесте делает свою работу.",
+  ],
+  brunch: [
+    "Дима вошёл в тестостероновый режим.",
+    "Идут мужские вопросики. Подождите.",
+    "Бранч требует концентрации и мяса.",
+  ],
+};
 
 const locations = {
   apartment: {
@@ -267,8 +318,9 @@ const events = [
     id: "tuktuk",
     title: "Hello sir, you need tuk-tuk?",
     text: "Тук-тук подъезжает к краю экрана и предлагает ехать вообще куда угодно.",
-    location: "sri",
+    location: null,
     className: "tuktuk-in",
+    keepClassUntilNextAction: true,
     image: memeImages.tuktuk,
     imagePosition: "center",
     effects: { home: -3, toilet: -3, vibe: 5 },
@@ -418,6 +470,7 @@ const state = {
   log: [],
   locked: false,
   currentAction: null,
+  busyText: "",
 };
 
 const els = {
@@ -437,6 +490,9 @@ const els = {
   ending: document.querySelector("#ending"),
   endingTitle: document.querySelector("#endingTitle"),
   endingText: document.querySelector("#endingText"),
+  tutorialCard: document.querySelector("#tutorialCard"),
+  tutorialClose: document.querySelector("#tutorialClose"),
+  soundButton: document.querySelector("#soundButton"),
   restartButton: document.querySelector("#restartButton"),
   playAgainButton: document.querySelector("#playAgainButton"),
 };
@@ -444,6 +500,17 @@ const els = {
 function init() {
   els.restartButton.addEventListener("click", resetGame);
   els.playAgainButton.addEventListener("click", resetGame);
+  els.tutorialClose.addEventListener("click", () => {
+    els.tutorialCard.classList.add("hidden");
+  });
+  els.soundButton.addEventListener("click", () => {
+    soundEnabled = !soundEnabled;
+    els.soundButton.textContent = soundEnabled ? "Звук вкл" : "Звук выкл";
+    els.soundButton.setAttribute("aria-pressed", String(soundEnabled));
+    if (soundEnabled) {
+      playSound("toggle");
+    }
+  });
   renderCharacters();
   resetGame();
 }
@@ -465,6 +532,7 @@ function resetGame() {
   state.log = [];
   state.locked = false;
   state.currentAction = null;
+  state.busyText = "";
   els.ending.classList.add("hidden");
   setBubble("Выберите первое действие для Димы.");
   setMeme({
@@ -525,6 +593,17 @@ function renderStats() {
 }
 
 function renderActions() {
+  els.actions.classList.toggle("is-hidden", state.locked);
+  if (state.locked) {
+    els.actions.innerHTML = `
+      <div class="busy-card" aria-live="polite">
+        <span class="busy-dot"></span>
+        <span>${state.busyText || sample(busyPhrases.default)}</span>
+      </div>
+    `;
+    return;
+  }
+
   els.actions.innerHTML = state.availableActions
     .map(
       (action) => `
@@ -564,9 +643,11 @@ function playAction(actionId) {
   const action = actions.find((item) => item.id === actionId);
   if (!action) return;
 
+  playSound("action");
   clearStageEffects();
   state.locked = true;
   state.currentAction = action;
+  state.busyText = getBusyText(action);
   renderActions();
 
   state.actionCounts[action.id] = (state.actionCounts[action.id] || 0) + 1;
@@ -596,6 +677,7 @@ function playAction(actionId) {
     }
     chooseActions();
     state.locked = false;
+    state.busyText = "";
     renderAll();
     if (state.currentAction) {
       applyActionStageMode(state.currentAction);
@@ -604,6 +686,7 @@ function playAction(actionId) {
 }
 
 function playEvent(event) {
+  playSound(event.id);
   state.seenEvents.add(event.id);
   if (event.location) {
     state.location = event.location;
@@ -650,14 +733,18 @@ function chooseActions() {
 }
 
 function chooseEvent(action) {
-  const baseChance = action.id === "brunch" ? 1 : state.turn % 3 === 0 ? 1 : 0.9;
+  if (action.id === "brunch") {
+    return events.find((event) => event.id === "nogei");
+  }
+
+  const baseChance = 1;
   if (Math.random() > baseChance) return null;
 
   const candidates = events.filter((event) => {
     const seenPenalty = state.seenEvents.has(event.id);
     if (seenPenalty && Math.random() < 0.86) return false;
     if (event.id === "spice" && action.id !== "masha" && state.location !== "sri") return false;
-    if (event.id === "nogei" && action.id !== "brunch" && state.actionCounts.brunch < 1) return false;
+    if (event.id === "nogei") return false;
     return true;
   });
 
@@ -671,7 +758,6 @@ function chooseEvent(action) {
 
 function getEventWeight(event, action) {
   if (event.id === "nogei" && action.id === "brunch") return 7;
-  if (event.id === "nogei" && state.actionCounts.brunch > 0) return 3;
   if (event.id === "frog") return 3.4;
   return 1;
 }
@@ -819,6 +905,7 @@ function setDimaOutfit(outfit) {
 }
 
 function finishGame() {
+  playSound("ending");
   state.locked = true;
   const ending = endings.find((item) => item.condition(state.stats, state));
   els.endingTitle.textContent = ending.title;
@@ -845,6 +932,9 @@ function setMeme(item) {
     els.memePhoto.style.backgroundImage = "";
     els.memePhoto.style.backgroundPosition = "";
   }
+  els.memeCard.classList.remove("flash");
+  void els.memeCard.offsetWidth;
+  els.memeCard.classList.add("flash");
 }
 
 function pushLog(text) {
@@ -865,6 +955,11 @@ function sample(items) {
   return items[Math.floor(Math.random() * items.length)];
 }
 
+function getBusyText(action) {
+  const phrases = busyPhrases[action.id] || busyPhrases.default;
+  return sample(phrases);
+}
+
 function weightedPick(items) {
   const total = items.reduce((sum, item) => sum + item.weight, 0);
   let cursor = Math.random() * total;
@@ -873,6 +968,81 @@ function weightedPick(items) {
     if (cursor <= 0) return item;
   }
   return items[items.length - 1];
+}
+
+function getAudioContext() {
+  if (!soundEnabled) return null;
+  const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+  if (!AudioContextClass) return null;
+  if (!audioContext) {
+    audioContext = new AudioContextClass();
+  }
+  if (audioContext.state === "suspended") {
+    audioContext.resume();
+  }
+  return audioContext;
+}
+
+function playSound(type) {
+  const context = getAudioContext();
+  if (!context) return;
+
+  const patterns = {
+    action: [
+      [220, 0.07, "square", 0.05, 0],
+      [330, 0.08, "square", 0.045, 0.07],
+    ],
+    frog: [
+      [150, 0.08, "sawtooth", 0.06, 0],
+      [110, 0.11, "sawtooth", 0.05, 0.1],
+      [180, 0.08, "sawtooth", 0.05, 0.2],
+    ],
+    nogei: [
+      [196, 0.1, "square", 0.05, 0],
+      [247, 0.1, "square", 0.05, 0.11],
+      [294, 0.16, "square", 0.05, 0.22],
+    ],
+    tuktuk: [
+      [95, 0.05, "square", 0.055, 0],
+      [95, 0.05, "square", 0.055, 0.09],
+      [128, 0.05, "square", 0.05, 0.18],
+      [128, 0.05, "square", 0.05, 0.27],
+    ],
+    tinder: [
+      [523, 0.08, "triangle", 0.045, 0],
+      [659, 0.08, "triangle", 0.045, 0.09],
+      [784, 0.12, "triangle", 0.04, 0.18],
+    ],
+    ending: [
+      [262, 0.12, "triangle", 0.05, 0],
+      [330, 0.12, "triangle", 0.05, 0.14],
+      [392, 0.2, "triangle", 0.05, 0.28],
+    ],
+    toggle: [[440, 0.08, "triangle", 0.035, 0]],
+    default: [
+      [294, 0.07, "square", 0.045, 0],
+      [220, 0.1, "square", 0.04, 0.09],
+    ],
+  };
+
+  (patterns[type] || patterns.default).forEach(([frequency, duration, wave, volume, delay]) => {
+    playTone(context, frequency, duration, wave, volume, delay);
+  });
+}
+
+function playTone(context, frequency, duration, wave, volume, delay) {
+  const oscillator = context.createOscillator();
+  const gain = context.createGain();
+  const start = context.currentTime + delay;
+  oscillator.type = wave;
+  oscillator.frequency.setValueAtTime(frequency, start);
+  gain.gain.setValueAtTime(0.0001, start);
+  gain.gain.exponentialRampToValueAtTime(volume, start + 0.01);
+  gain.gain.exponentialRampToValueAtTime(0.0001, start + duration);
+  oscillator.connect(gain);
+  gain.connect(context.destination);
+  oscillator.start(start);
+  oscillator.stop(start + duration + 0.03);
 }
 
 init();
